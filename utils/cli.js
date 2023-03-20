@@ -2,11 +2,11 @@ const meow = require('meow');
 const meowHelp = require('cli-meow-help');
 
 const flags = {
-	clear: {
+	create: {
 		type: `boolean`,
-		default: true,
+		default: false,
 		alias: `c`,
-		desc: `Clear the console`
+		desc: `Create the next component package.`
 	},
 	noClear: {
 		type: `boolean`,
