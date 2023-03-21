@@ -102,7 +102,7 @@ function page(name) {
 					declaration: 'arrow',
 					layout: {
 						getLayout: true,
-						importFrom: '@nextapp/layout',
+						importFrom: '@nextapp/Layout',
 						dynamic: true
 					},
 					serverSideProps: false
@@ -120,10 +120,10 @@ function page(name) {
 		const PageFileContent = [
 			/** dynamic import of layout */
 			PagesConfigObject.pages.pattern.layout.dynamic
-				? `import dynamic from "next/dynamic"\nconst Layout = dynamic(() => import('${PagesConfigObject.pages.pattern.layout.importFrom}'))\n`
+				? `import dynamic from "next/dynamic"\nconst Layout = dynamic(() => import('${PagesConfigObject.pages.pattern.layout.importFrom}'))\nconst Meta = dynamic(()=>import("@nextapp/Meta"))\n`
 				: `import Layout from '${PagesConfigObject.pages.pattern.layout.importFrom}'\n`,
 			PagesConfigObject.pages.pattern.declaration === 'arrow'
-				? `const ${name} = () => {\n\treturn <>${name}</>\n}\n`
+				? `const ${name} = () => {\n\treturn (\n\t\t<>\n\t\t\t<Meta />\n\t\t\t${name}\n\t\t</>\n\t)\n}\n`
 				: `function ${name}() {\n\treturn <>${name}</>\n}\n`,
 			PagesConfigObject.pages.pattern.layout.getLayout
 				? `${name}.getLayout = (page) => {\n\treturn <Layout>{page}</Layout>\n}\n`
