@@ -140,7 +140,7 @@ function package(name) {
 			},
 			packageJson: {
 				path: 'package.json',
-				content: `{\n\t"name": "${packagesAlias_}",\n\t"main": "index.ts",\n\t"version":"1.0.0"\n}\n`
+				content: `{\n\t"name": "${PackagesConfigObject.packages.alias}",\n\t"main": "index.ts",\n\t"version":"1.0.0"\n}\n`
 			},
 			componentTsx: {
 				path: `${name}.tsx`,
