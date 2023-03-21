@@ -1,7 +1,7 @@
 {
 	"name": "nextuse",
 	"description": "A utility CLI for nextjs development environment.",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"license": "MIT",
 	"bin": {
 		"nextuse": "index.js"
