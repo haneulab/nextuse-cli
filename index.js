@@ -22,7 +22,7 @@ const PACKAGES = {
 			`import { default as ${filename} } from "./${filename}"\nexport default ${filename}`,
 		packageJson: filename =>
 			`{\n"name": "@nextapp/${filename.toLowerCase()}",\n"main": "index.ts",\n"version": "1.0.0"\n}`,
-		typeTs: filename => `export interface I${filename} {\nid:string\n}`,
+		typeTs: filename => `export interface I${filename} {\n\tid?:string\n}`,
 		componentTsx: filename =>
 			`import type {I${filename}} from "./${filename}.types"\n\nconst ${filename} = (props: I${filename}) => {\n\treturn <></>\n}\n\nexport default ${filename}`
 	}
