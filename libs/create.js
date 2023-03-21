@@ -52,11 +52,6 @@ function page(name = null) {
 		);
 	}
 
-	const nameCapitalized = [
-		name[0].toUpperCase(),
-		...name.split('').slice(1)
-	].join('');
-
 	fs.readFile(NextUseConfigFileName, 'utf-8', function (error, data) {
 		const data_ = JSON.parse(data);
 		const root_ = data_['root'] ?? false;
@@ -117,12 +112,12 @@ function page(name = null) {
 				? `import dynamic from "next/dynamic"\nconst Layout = dynamic(() => import('${PagesConfigObject.pages.pattern.layout.importFrom}'))\n`
 				: `import Layout from '${PagesConfigObject.pages.pattern.layout.importFrom}'\n`,
 			PagesConfigObject.pages.pattern.declaration === 'arrow'
-				? `const ${nameCapitalized} = () => {\n\treturn <>${nameCapitalized}</>\n}\n`
-				: `function ${nameCapitalized}() {\n\treturn <>${nameCapitalized}</>\n}\n`,
+				? `const ${name} = () => {\n\treturn <>${name}</>\n}\n`
+				: `function ${name}() {\n\treturn <>${name}</>\n}\n`,
 			PagesConfigObject.pages.pattern.layout.getLayout
-				? `${nameCapitalized}.getLayout = (page) => {\n\treturn <Layout>{page}</Layout>\n}\n`
+				? `${name}.getLayout = (page) => {\n\treturn <Layout>{page}</Layout>\n}\n`
 				: '',
-			`export default ${nameCapitalized}`
+			`export default ${name}`
 		].join('\n');
 
 		/** IF pages dir does not exist */
@@ -137,33 +132,70 @@ function page(name = null) {
 			);
 		}
 		/** IF the page name already exist */
-		if (
-			fs.existsSync(
-				[
-					PagesConfigObject.root,
-					PagesConfigObject.pages.path,
-					nameCapitalized + '.tsx'
-				].join('/')
-			)
-		) {
-			console.log(
-				`|->\tCreating Page Failed: ${nameCapitalized}.tsx already exists in ${[
+		if (pagesAsDir_) {
+			if (
+				fs.existsSync(
+					[
+						PagesConfigObject.root,
+						PagesConfigObject.pages.path,
+						name
+					].join('/')
+				)
+			) {
+				console.log(
+					`|->\tCreating Page Failed: ${name} directory already exists in ${[
+						PagesConfigObject.root,
+						PagesConfigObject.pages.path
+					].join('/')}.\n`
+				);
+				throw new NextUseCreateError(
+					`The page directory '${name}' already exists in the ${PagesConfigObject.pages.path} directory. Please try different page name.`
+				);
+			} else {
+				fs.mkdirSync(
+					[
+						PagesConfigObject.root,
+						PagesConfigObject.pages.path,
+						name
+					].join('/')
+				);
+				createPageFile_(
+					[name, 'index.tsx'].join('/'),
+					PageFileContent,
 					PagesConfigObject.root,
 					PagesConfigObject.pages.path
-				].join('/')}.\n`
-			);
-			throw new NextUseCreateError(
-				`The page '${nameCapitalized + '.tsx'}' already exists in the ${
+				);
+			}
+		} else {
+			if (
+				fs.existsSync(
+					[
+						PagesConfigObject.root,
+						PagesConfigObject.pages.path,
+						name + '.tsx'
+					].join('/')
+				)
+			) {
+				console.log(
+					`|->\tCreating Page Failed: ${name}.tsx already exists in ${[
+						PagesConfigObject.root,
+						PagesConfigObject.pages.path
+					].join('/')}.\n`
+				);
+				throw new NextUseCreateError(
+					`The page '${name + '.tsx'}' already exists in the ${
+						PagesConfigObject.pages.path
+					} directory. Please try different page name.`
+				);
+			} else {
+				createPageFile_(
+					name + '.tsx',
+					PageFileContent,
+					PagesConfigObject.root,
 					PagesConfigObject.pages.path
-				} directory. Please try different page name.`
-			);
+				);
+			}
 		}
-		createPageFile_(
-			nameCapitalized + '.tsx',
-			PageFileContent,
-			PagesConfigObject.root,
-			PagesConfigObject.pages.path
-		);
 	});
 }
 function package(name) {
