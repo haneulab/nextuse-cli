@@ -144,7 +144,7 @@ function package(name) {
 			},
 			componentTsx: {
 				path: `${name}.tsx`,
-				content: `import type {I${name}} from "./${name}.types.ts"\n\nconst ${name} = (props: I${name}) => {\n\treturn <></>\n}\n\nexport default ${name}\n`
+				content: `import type {I${name}} from "./${name}.types"\n\nconst ${name} = (props: I${name}) => {\n\treturn <></>\n}\n\nexport default ${name}\n`
 			}
 		};
 
