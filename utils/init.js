@@ -2,15 +2,15 @@ const welcome = require('cli-welcome');
 const pkg = require('./../package.json');
 const unhandled = require('cli-handle-unhandled');
 
-module.exports = ({ clear = true }) => {
+module.exports = ({ clear = false }) => {
 	unhandled();
 	welcome({
 		title: `nextuse`,
 		tagLine: `by Haneul Choi`,
 		description: pkg.description,
 		version: pkg.version,
-		bgColor: '#36BB09',
-		color: '#000000',
+		bgColor: '#2F58CD',
+		color: '#FFFFFF',
 		bold: true,
 		clear
 	});

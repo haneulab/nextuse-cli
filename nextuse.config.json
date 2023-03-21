@@ -1,0 +1,26 @@
+{
+	"root": ".",
+	"pages": {
+		"path": "pages",
+		"asDir": true,
+		"pattern": {
+			"declaration": "arrow",
+			"layout": {
+				"getLayout": true,
+				"importFrom": "@nextapp/layout",
+				"dynamic": true
+			},
+			"serverSideProps": false
+		}
+	},
+	"packages": {
+		"path": "packages",
+		"alias": "@nextapp/^package",
+		"files": {
+			"main": "index.ts",
+			"type": "^package.types.ts",
+			"component": "^package.tsx",
+			"packageJson": "@nextapp/^package"
+		}
+	}
+}

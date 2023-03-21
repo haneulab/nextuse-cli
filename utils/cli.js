@@ -2,16 +2,23 @@ const meow = require('meow');
 const meowHelp = require('cli-meow-help');
 
 const flags = {
+	init: {
+		type: `boolean`,
+		default: false,
+		alias: 'i',
+		desc: "Initializes nextuse by creating 'nextuse.config.js' in the root."
+	},
 	create: {
 		type: `boolean`,
 		default: false,
-		alias: `c`,
-		desc: `Create the next component package.`
+		alias: 'c',
+		desc: 'Creates a project package or page.'
 	},
-	noClear: {
+	help: {
 		type: `boolean`,
 		default: false,
-		desc: `Don't clear the console`
+		alias: 'h',
+		desc: 'Displays availabel commands for nextuse CLI.'
 	},
 	debug: {
 		type: `boolean`,
