@@ -17,7 +17,7 @@ function createNextUseConfig_(
 	console.log(
 		"|->\tCompleted checking prerequisites. Now creating 'nextuse.config.js' in the root.\n"
 	);
-	const defaultNextUseConfig = `{\n\t"root": ".",\n\t"pages": {\n\t\t"path": "pages",\n\t\t"asDir": true,\n\t\t"pattern": {\n\t\t\t"declaration": "arrow",\n\t\t\t"layout": {\n\t\t\t\t"getLayout": true,\n\t\t\t\t"importFrom": "@nextapp/layout",\n\t\t\t\t"dynamic": true\n\t\t\t},\n\t\t\t"serverSideProps": false\n\t\t}\n\t},\n\t"packages": {\n\t\t"path": "packages/^package",\n\t\t"alias": "@nextapp/^package"\n\t}\n}\n`;
+	const defaultNextUseConfig = `{\n\t"root": ".",\n\t"pages": {\n\t\t"path": "pages",\n\t\t"asDir": true,\n\t\t"pattern": {\n\t\t\t"declaration": "arrow",\n\t\t\t"layout": {\n\t\t\t\t"getLayout": true,\n\t\t\t\t"importFrom": "@nextapp/Layout",\n\t\t\t\t"dynamic": true\n\t\t\t},\n\t\t\t"serverSideProps": false\n\t\t}\n\t},\n\t"packages": {\n\t\t"path": "packages/^package",\n\t\t"alias": "@nextapp/^package"\n\t}\n}\n`;
 	fs.writeFileSync(
 		['.', NextUseConfigFileName].join('/'),
 		defaultNextUseConfig
