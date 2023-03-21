@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { attributeExist_, parsePageConfig_ } = require('./utils');
 
 class NextUseCreatePageError extends Error {
 	constructor(message) {
@@ -8,9 +9,7 @@ class NextUseCreatePageError extends Error {
 }
 
 function createPageDir_(root = '.', dirName = 'pages') {
-	console.log(
-		`|->\tCreating pages directory ${[root, dirName].join('/')}.\n`
-	);
+	console.log(`|->\tCreating pages directory ${[root, dirName].join('/')}.`);
 	fs.mkdirSync([root, dirName].join('/'));
 	console.log(
 		`Successfully created pages directory ${[root, dirName].join('/')}.\n`
@@ -19,7 +18,7 @@ function createPageDir_(root = '.', dirName = 'pages') {
 
 function createPageFile_(fileName, content, root = '.', dirName = 'pages') {
 	console.log(
-		`|->\tCreating pages file ${[root, dirName, fileName].join('/')}.\n`
+		`|->\tCreating page file ${[root, dirName, fileName].join('/')}.`
 	);
 	fs.writeFileSync([root, dirName, fileName].join('/'), content);
 	console.log(
@@ -27,19 +26,7 @@ function createPageFile_(fileName, content, root = '.', dirName = 'pages') {
 	);
 }
 
-function parsePageConfig_(data) {
-	return JSON.parse(data);
-}
-
-function attributeExist_(parsedObject, key, fail) {
-	if (!parsedObject[key]) {
-		fail();
-	} else {
-		return parsedObject[key];
-	}
-}
-
-function page(name = null) {
+function page(name) {
 	const NextUseConfigFileName = 'nextuse.config.json';
 
 	if (!fs.existsSync(NextUseConfigFileName)) {
@@ -57,10 +44,22 @@ function page(name = null) {
 			`|->\tCreating Page Failed: Did you forget to include the filename you want to create?\n`
 		);
 		console.log(
-			"To create a page, please enter the following commands\n\n\t'nextuse -c <page-name>' or 'nextuse --create <page-name>'"
+			"To create a page, please enter the following commands\n\n\t'nextuse -c page <page-name>' or 'nextuse --create page <page-name>'"
 		);
 		throw new NextUseCreatePageError(
 			'You did not include the page name you want to create. Please try again.'
+		);
+	}
+	if (
+		`~!@#$%^&*()_-+={[}]|"':;?/>.<,`
+			.split('')
+			.find(each => name.includes(each))
+	) {
+		console.log(
+			`|->\tCreating Page Failed: Your page name should not include specical character.\n`
+		);
+		throw new NextUseCreatePageError(
+			'Your page name should not include specical character. Please try again.'
 		);
 	}
 
@@ -129,7 +128,7 @@ function page(name = null) {
 			PagesConfigObject.pages.pattern.layout.getLayout
 				? `${name}.getLayout = (page) => {\n\treturn <Layout>{page}</Layout>\n}\n`
 				: '',
-			`export default ${name}`
+			`export default ${name}\n`
 		].join('\n');
 
 		/** IF pages dir does not exist */

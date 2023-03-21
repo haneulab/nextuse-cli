@@ -6,8 +6,7 @@
  *
  * @author Haneul Choi <https://github.com/haneulab>
  */
-const { initialize } = require('./libs/initialize');
-const { page, package } = require('./libs/create');
+const { initialize, create } = require('./libs');
 
 const init = require('./utils/init');
 const cli = require('./utils/cli');
@@ -26,7 +25,18 @@ const { clear, debug } = flags;
 	if (flags.init) {
 		initialize();
 	} else if (flags.create) {
-		page(input[0]);
+		const [type, name] = input;
+		if (!type) {
+			console.log(
+				'|->\tIncomplete Create Command: You did not include the type of action for create-action.\n'
+			);
+			console.log(
+				"Please enter 'nextuse -c package <package-name>' or 'nextuse -c page <page-name>'."
+			);
+			return;
+		}
+		if (type === 'page') create.page(name);
+		if (type === 'package') create.package(name);
 	} else if (flags.help) {
 		cli.showHelp(0);
 	} else {
@@ -35,4 +45,4 @@ const { clear, debug } = flags;
 			`|->\tUnknown command '${unknownCommand}' entered.\n\nPlease enter 'nextuse -h' or 'nextuse --help' to see available commands.`
 		);
 	}
-})().then(() => {});
+})();
