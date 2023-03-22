@@ -94,38 +94,55 @@ function package(name) {
 			);
 		});
 
-		const packages_ = attributeExist_(data_, 'packages', function () {
+		const alias = attributeExist_(data_, 'alias', function () {
 			console.log(
 				`|->\tCreating Package Failed: Please reconfigure your '${NextUseConfigFileName}'.\n`
 			);
-			throw new NextUseCreatePackageError(
-				`You are missing the 'packages' object in your '${NextUseConfigFileName}'.`
+			throw new NextUseCreatePageError(
+				`You are missing the 'alias' path string in your '${NextUseConfigFileName}'.`
 			);
 		});
 
-		const packagesPath_ = attributeExist_(packages_, 'path', function () {
+		const components_ = attributeExist_(data_, 'components', function () {
 			console.log(
 				`|->\tCreating Package Failed: Please reconfigure your '${NextUseConfigFileName}'.\n`
 			);
 			throw new NextUseCreatePackageError(
-				`You are missing the 'path' string in your '${NextUseConfigFileName}' in the 'packages' object.`
+				`You are missing the 'components' object in your '${NextUseConfigFileName}'.`
 			);
 		});
 
-		const packagesAlias_ = attributeExist_(packages_, 'alias', function () {
+		const packagesPath_ = attributeExist_(components_, 'path', function () {
 			console.log(
 				`|->\tCreating Package Failed: Please reconfigure your '${NextUseConfigFileName}'.\n`
 			);
 			throw new NextUseCreatePackageError(
-				`You are missing the 'alias' string in your '${NextUseConfigFileName}' in the 'packages' object.`
+				`You are missing the 'path' string in your '${NextUseConfigFileName}' in the 'components' object.`
 			);
 		});
+
+		const packagesAlias_ = attributeExist_(
+			components_,
+			'alias',
+			function () {
+				console.log(
+					`|->\tCreating Package Failed: Please reconfigure your '${NextUseConfigFileName}'.\n`
+				);
+				throw new NextUseCreatePackageError(
+					`You are missing the 'alias' string in your '${NextUseConfigFileName}' in the 'components' object.`
+				);
+			}
+		);
 
 		const PackagesConfigObject = {
 			root: root_,
 			packages: {
-				path: packagesPath_.replace('^package', name),
-				alias: packagesAlias_.replace('^package', name)
+				path: packagesPath_
+					.replace('^alias', alias)
+					.replace('^package', name),
+				alias: packagesAlias_
+					.replace('^alias', alias)
+					.replace('^package', name)
 			}
 		};
 

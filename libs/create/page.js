@@ -75,6 +75,15 @@ function page(name) {
 			);
 		});
 
+		const alias = attributeExist_(data_, 'alias', function () {
+			console.log(
+				`|->\tCreating Page Failed: Please reconfigure your '${NextUseConfigFileName}'.\n`
+			);
+			throw new NextUseCreatePageError(
+				`You are missing the 'alias' path string in your '${NextUseConfigFileName}'.`
+			);
+		});
+
 		const pages_ = attributeExist_(data_, 'pages', function () {
 			console.log(
 				`|->\tCreating Page Failed: Please reconfigure your '${NextUseConfigFileName}'.\n`
@@ -102,7 +111,7 @@ function page(name) {
 					declaration: 'arrow',
 					layout: {
 						getLayout: true,
-						importFrom: '@nextapp/Layout',
+						importFrom: `${alias}/Layout`,
 						dynamic: true
 					},
 					serverSideProps: false
@@ -120,8 +129,14 @@ function page(name) {
 		const PageFileContent = [
 			/** dynamic import of layout */
 			PagesConfigObject.pages.pattern.layout.dynamic
-				? `import dynamic from "next/dynamic"\nconst Layout = dynamic(() => import('${PagesConfigObject.pages.pattern.layout.importFrom}'))\nconst Meta = dynamic(()=>import("@nextapp/Meta"))\n`
-				: `import Layout from '${PagesConfigObject.pages.pattern.layout.importFrom}'\n`,
+				? `import dynamic from "next/dynamic"\nconst Layout = dynamic(() => import('${PagesConfigObject.pages.pattern.layout.importFrom.replace(
+						'^alias',
+						alias
+				  )}'))\nconst Meta = dynamic(()=>import("${alias}/Meta"))\n`
+				: `import Layout from '${PagesConfigObject.pages.pattern.layout.importFrom.replace(
+						'^alias',
+						alias
+				  )}'\n`,
 			PagesConfigObject.pages.pattern.declaration === 'arrow'
 				? `const ${name} = () => {\n\treturn (\n\t\t<>\n\t\t\t<Meta />\n\t\t\t${name}\n\t\t</>\n\t)\n}\n`
 				: `function ${name}() {\n\treturn <>${name}</>\n}\n`,
